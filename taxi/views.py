@@ -10,14 +10,17 @@ from .forms import (DriverCreationForm,
                     DriverLicenseUpdateForm,
                     CarCreationForm,
                     CarUpdateForm)
-from .models import Driver, Car, Manufacturer
+from .models import Car, Manufacturer
+
+
+User = get_user_model()
 
 
 @login_required
 def index(request):
     """View function for the home page of the site."""
 
-    num_drivers = Driver.objects.count()
+    num_drivers = User.objects.count()
     num_cars = Car.objects.count()
     num_manufacturers = Manufacturer.objects.count()
 
@@ -85,9 +88,6 @@ class CarDeleteView(LoginRequiredMixin, generic.DeleteView):
     success_url = reverse_lazy("taxi:car-list")
 
 
-User = get_user_model()
-
-
 class DriverListView(LoginRequiredMixin, generic.ListView):
     model = User
     fields = "__all__"
@@ -138,4 +138,4 @@ class CarToggleDriverView(LoginRequiredMixin, View):
 
 class DriverDetailView(LoginRequiredMixin, generic.DetailView):
     model = User
-    queryset = Driver.objects.all().prefetch_related("cars__manufacturer")
+    queryset = User.objects.all().prefetch_related("cars__manufacturer")
