@@ -27,13 +27,15 @@
       Delete
     </a>
   </div>
-  {% if user not in car.drivers.all %}
-    <a style="color: green" href="{% url 'taxi:car-update' pk=car.id %}">
-      Assign me to this car
-    </a>
+  {% if user in car.drivers.all %}
+    <form method="POST" action="{% url 'taxi:car-toggle-driver' pk=car.id %}">
+      {% csrf_token %}
+      <button type="submit">Delete me from this car</button>
+    </form>
   {% else %}
-    <a style="color: red" href="{% url 'taxi:car-update' pk=car.id %}">
-      Delete me from this car
-    </a>
+    <form method="POST" action="{% url 'taxi:car-toggle-driver' pk=car.id %}">
+      {% csrf_token %}
+      <button type="submit">Assign me to this car</button>
+    </form>
   {% endif %}
 {% endblock %}
